@@ -37,8 +37,10 @@ const SignUpPage: NextPage = () => {
   }, []);
 
   return (
-    <main className="flex flex-col justify-center items-center">
-      <h1 className="text-3xl font-bold mb-10">회원가입</h1>
+    <main className="flex flex-col items-center mt-32">
+      <h1>
+        <Image src="/PingPong.svg" width={320} height={100} />
+      </h1>
       <form className="flex flex-col" onSubmit={onSubmit}>
         <div className="mb-2 text-center">
           <Image
@@ -52,7 +54,7 @@ const SignUpPage: NextPage = () => {
           />
         </div>
         <button
-          className="mb-3 block text-sm"
+          className="mb-5 block text-sm"
           type="button"
           onClick={onClickChangeProfileImage}
         >
@@ -88,7 +90,10 @@ const SignUpPage: NextPage = () => {
           value={nickname}
           onChange={onChangeNickname}
         />
-        <button className="bg-sky-300 py-2 rounded mb-2 w-80" type="submit">
+        <button
+          className="bg-sky-600 text-white py-2 rounded mb-2 w-80"
+          type="submit"
+        >
           회원가입하기
         </button>
         <button className="border py-2 rounded w-80" type="button">
