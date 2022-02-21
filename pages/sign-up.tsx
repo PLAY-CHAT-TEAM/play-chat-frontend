@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import useInput from "../hooks/useInput";
@@ -8,11 +8,13 @@ const SignUpPage: NextPage = () => {
   const router = useRouter();
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
+  const [passwordCheck, onChangePasswordCheck] = useInput("");
   const [nickname, onChangeNickname] = useInput("");
   const [previewImageDataURL, setPreviewImageDataURL] = useState<string>(
     "/default-profile.png"
   );
   const uploadFileRef = useRef<HTMLInputElement | null>(null);
+  const [passwordError, setPasswordError] = useState(false);
 
   const onUploadFile = useCallback((event) => {
     const {
@@ -31,15 +33,30 @@ const SignUpPage: NextPage = () => {
     uploadFileRef.current?.click();
   }, []);
 
-  const onSubmit = useCallback((event) => {
-    event.preventDefault();
-    router.push("/");
-  }, []);
+  const onSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (
+        !email.trim() ||
+        !password.trim() ||
+        !passwordCheck.trim() ||
+        !nickname.trim()
+      ) {
+        return;
+      }
+      router.push("/");
+    },
+    [router, email, password, passwordCheck, nickname]
+  );
+
+  useEffect(() => {
+    setPasswordError(password !== passwordCheck);
+  }, [password, passwordCheck]);
 
   return (
     <main className="flex flex-col items-center mt-32">
-      <h1>
-        <Image src="/PingPong.svg" width={320} height={100} />
+      <h1 className="mb-7">
+        <Image src="/PingPong.png" width={320} height={45} />
       </h1>
       <form className="flex flex-col" onSubmit={onSubmit}>
         <div className="mb-2 text-center">
@@ -61,13 +78,13 @@ const SignUpPage: NextPage = () => {
           프로필이미지변경
         </button>
         <input
-          className="mb-3 w-80 hidden"
+          className="mb-4 w-80 hidden"
           type="file"
           onChange={onUploadFile}
           ref={uploadFileRef}
         />
         <input
-          className="px-3 py-2 border rounded mb-3 w-80"
+          className="px-3 py-2 border rounded mb-4 w-80"
           type="email"
           required
           placeholder="이메일"
@@ -75,7 +92,7 @@ const SignUpPage: NextPage = () => {
           onChange={onChangeEmail}
         />
         <input
-          className="px-3 py-2 border rounded mb-3 w-80"
+          className="px-3 py-2 border rounded mb-4 w-80"
           type="password"
           required
           placeholder="비밀번호"
@@ -83,7 +100,22 @@ const SignUpPage: NextPage = () => {
           onChange={onChangePassword}
         />
         <input
-          className="px-3 py-2 border rounded mb-3 w-80"
+          className={`px-3 py-2 border rounded w-80 ${
+            !passwordError && "mb-4"
+          }`}
+          type="password"
+          required
+          placeholder="비밀번호확인"
+          value={passwordCheck}
+          onChange={onChangePasswordCheck}
+        />
+        {passwordError && (
+          <span className="text-xs text-red-600 italic">
+            비밀번호가 일치하지 않습니다.
+          </span>
+        )}
+        <input
+          className="px-3 py-2 border rounded mb-4 w-80"
           type="text"
           required
           placeholder="닉네임"
@@ -96,7 +128,7 @@ const SignUpPage: NextPage = () => {
         >
           회원가입하기
         </button>
-        <button className="border py-2 rounded w-80" type="button">
+        <button className="border py-2 rounded w-80 text-sm" type="button">
           로그인하러가기
         </button>
       </form>
