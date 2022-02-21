@@ -52,43 +52,43 @@ const SignUpPage: NextPage = () => {
           />
         </div>
         <button
-          className="mb-4 block"
+          className="mb-3 block text-sm"
           type="button"
           onClick={onClickChangeProfileImage}
         >
           프로필이미지변경
         </button>
         <input
-          className="mb-4 w-80 hidden"
+          className="mb-3 w-80 hidden"
           type="file"
           onChange={onUploadFile}
           ref={uploadFileRef}
         />
         <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+          className="px-3 py-2 border rounded mb-3 w-80"
           type="email"
           required
-          placeholder="EMAIL"
+          placeholder="이메일"
           value={email}
           onChange={onChangeEmail}
         />
         <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+          className="px-3 py-2 border rounded mb-3 w-80"
           type="password"
           required
-          placeholder="PASSWORD"
+          placeholder="비밀번호"
           value={password}
           onChange={onChangePassword}
         />
         <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+          className="px-3 py-2 border rounded mb-3 w-80"
           type="text"
           required
-          placeholder="NICKNAME"
+          placeholder="닉네임"
           value={nickname}
           onChange={onChangeNickname}
         />
-        <button className="bg-green-400 py-2 rounded mb-2 w-80" type="submit">
+        <button className="bg-sky-300 py-2 rounded mb-2 w-80" type="submit">
           회원가입하기
         </button>
         <button className="border py-2 rounded w-80" type="button">
