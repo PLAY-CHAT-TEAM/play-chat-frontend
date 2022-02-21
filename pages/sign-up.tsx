@@ -2,34 +2,14 @@ import type { NextPage } from "next";
 import { useCallback, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import useInput from "../hooks/useInput";
 
 const SignUpPage: NextPage = () => {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [email, onChangeEmail] = useInput("");
+  const [password, onChangePassword] = useInput("");
+  const [nickname, onChangeNickname] = useInput("");
   const [previewImageDataURL, setPreviewImageDataURL] = useState<string>("");
-
-  const onChangeEmail = useCallback((event) => {
-    const {
-      target: { value },
-    } = event;
-    setEmail(value);
-  }, []);
-
-  const onChangePassword = useCallback((event) => {
-    const {
-      target: { value },
-    } = event;
-    setPassword(value);
-  }, []);
-
-  const onChangeNickname = useCallback((event) => {
-    const {
-      target: { value },
-    } = event;
-    setNickname(value);
-  }, []);
 
   const onUploadFile = useCallback((event) => {
     const {
