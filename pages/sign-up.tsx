@@ -40,13 +40,14 @@ const SignUpPage: NextPage = () => {
         !email.trim() ||
         !password.trim() ||
         !passwordCheck.trim() ||
-        !nickname.trim()
+        !nickname.trim() ||
+        passwordError
       ) {
         return;
       }
       router.push("/");
     },
-    [router, email, password, passwordCheck, nickname]
+    [router, email, password, passwordCheck, nickname, passwordError]
   );
 
   useEffect(() => {
