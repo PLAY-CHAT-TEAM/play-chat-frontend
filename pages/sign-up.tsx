@@ -5,8 +5,9 @@ import useInput from "../hooks/useInput";
 import SignPage from "../layouts/SignPage";
 import Input from "../components/Input";
 import Error from "../components/Error";
+import { NextPageWithLayout } from "./_app";
 
-const SignUpPage = () => {
+const SignUpPage: NextPageWithLayout = () => {
   const router = useRouter();
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
