@@ -57,7 +57,7 @@ const SignUpPage: NextPage = () => {
   return (
     <main className="flex flex-col items-center mt-32">
       <h1 className="mb-7">
-        <Image src="/PingPong.png" width={320} height={45} />
+        <Image src="/PingPong.png" width={320} height={75} />
       </h1>
       <form className="flex flex-col" onSubmit={onSubmit}>
         <div className="mb-2 text-center">
