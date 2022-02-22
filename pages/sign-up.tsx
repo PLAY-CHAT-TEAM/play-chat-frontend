@@ -74,7 +74,7 @@ const SignUpPage = () => {
         />
       </div>
       <button
-        className="mb-5 block text-sm"
+        className="mb-5 text-sm"
         type="button"
         onClick={onClickChangeProfileImage}
       >
