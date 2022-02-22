@@ -42,13 +42,13 @@ const SignInPage: NextPage = () => {
           onChange={onChangePassword}
         />
         <button
-          className="bg-sky-600 text-white py-2 rounded mb-2 w-80"
+          className="bg-sky-600 text-white py-2 rounded mb-2 w-80 focus:outline-sky-700"
           type="submit"
         >
           로그인하기
         </button>
         <button
-          className="border py-2 rounded w-80 text-sm"
+          className="border py-2 rounded w-80 text-sm focus:outline-sky-700"
           type="button"
           onClick={onClickSignUp}
         >

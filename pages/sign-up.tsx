@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import useInput from "../hooks/useInput";
 import SignPage from "../layouts/SignPage";
 import Input from "../components/Input";
+import Error from "../components/Error";
 
 const SignUpPage: NextPage = () => {
   const router = useRouter();
@@ -102,7 +103,7 @@ const SignUpPage: NextPage = () => {
           onChange={onChangePassword}
         />
         <input
-          className={`px-3 py-2 border rounded w-80 ${
+          className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
             !passwordError && "mb-4"
           }`}
           type="password"
@@ -111,11 +112,7 @@ const SignUpPage: NextPage = () => {
           value={passwordCheck}
           onChange={onChangePasswordCheck}
         />
-        {passwordError && (
-          <span className="text-xs text-red-600 italic">
-            비밀번호가 일치하지 않습니다.
-          </span>
-        )}
+        {passwordError && <Error message="비밀번호가 일치하지 않습니다." />}
         <Input
           type="text"
           required
@@ -124,13 +121,13 @@ const SignUpPage: NextPage = () => {
           onChange={onChangeNickname}
         />
         <button
-          className="bg-sky-600 text-white py-2 rounded mb-2 w-80"
+          className="bg-sky-600 text-white py-2 rounded mb-2 w-80 focus:outline-sky-700"
           type="submit"
         >
           회원가입하기
         </button>
         <button
-          className="border py-2 rounded w-80 text-sm"
+          className="border py-2 rounded w-80 text-sm focus:outline-sky-700"
           type="button"
           onClick={onClickSignIn}
         >
