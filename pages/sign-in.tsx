@@ -1,7 +1,7 @@
 import { NextPage } from "next";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
+import Input from "../components/Input";
 import useInput from "../hooks/useInput";
 import SignPage from "../layouts/SignPage";
 
@@ -27,16 +27,14 @@ const SignInPage: NextPage = () => {
   return (
     <SignPage title="SignIn">
       <form className="flex flex-col" onSubmit={onSubmit}>
-        <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+        <Input
           type="email"
           required
           placeholder="이메일"
           value={email}
           onChange={onChangeEmail}
         />
-        <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+        <Input
           type="password"
           required
           placeholder="비밀번호"
