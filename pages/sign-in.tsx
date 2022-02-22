@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import useInput from "../hooks/useInput";
+import SignPage from "../layouts/SignPage";
 
 const SignInPage: NextPage = () => {
   const router = useRouter();
@@ -24,10 +25,7 @@ const SignInPage: NextPage = () => {
   );
 
   return (
-    <main className="flex flex-col items-center mt-32">
-      <h1 className="mb-7">
-        <Image src="/PingPong.png" width={320} height={75} />
-      </h1>
+    <SignPage title="SignIn">
       <form className="flex flex-col" onSubmit={onSubmit}>
         <input
           className="px-3 py-2 border rounded mb-4 w-80"
@@ -59,7 +57,7 @@ const SignInPage: NextPage = () => {
           회원가입하러가기
         </button>
       </form>
-    </main>
+    </SignPage>
   );
 };
 
