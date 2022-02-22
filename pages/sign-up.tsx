@@ -50,6 +50,10 @@ const SignUpPage: NextPage = () => {
     [router, email, password, passwordCheck, nickname, passwordError]
   );
 
+  const onClickSignIn = useCallback(() => {
+    router.push("/sign-in");
+  }, [router]);
+
   useEffect(() => {
     setPasswordError(password !== passwordCheck);
   }, [password, passwordCheck]);
@@ -129,7 +133,11 @@ const SignUpPage: NextPage = () => {
         >
           회원가입하기
         </button>
-        <button className="border py-2 rounded w-80 text-sm" type="button">
+        <button
+          className="border py-2 rounded w-80 text-sm"
+          type="button"
+          onClick={onClickSignIn}
+        >
           로그인하러가기
         </button>
       </form>
