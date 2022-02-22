@@ -83,7 +83,7 @@ const SignUpPage: NextPage = () => {
           프로필이미지변경
         </button>
         <input
-          className="mb-4 w-80 hidden"
+          className="hidden"
           type="file"
           onChange={onUploadFile}
           ref={uploadFileRef}
