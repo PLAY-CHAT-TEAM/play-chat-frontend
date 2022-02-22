@@ -3,6 +3,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import useInput from "../hooks/useInput";
+import SignPage from "../layouts/SignPage";
+import Input from "../components/Input";
+import Error from "../components/Error";
 
 const SignUpPage: NextPage = () => {
   const router = useRouter();
@@ -59,10 +62,7 @@ const SignUpPage: NextPage = () => {
   }, [password, passwordCheck]);
 
   return (
-    <main className="flex flex-col items-center mt-32">
-      <h1 className="mb-7">
-        <Image src="/PingPong.png" width={320} height={75} />
-      </h1>
+    <SignPage title="SignUp">
       <form className="flex flex-col" onSubmit={onSubmit}>
         <div className="mb-2 text-center">
           <Image
@@ -83,21 +83,19 @@ const SignUpPage: NextPage = () => {
           프로필이미지변경
         </button>
         <input
-          className="mb-4 w-80 hidden"
+          className="hidden"
           type="file"
           onChange={onUploadFile}
           ref={uploadFileRef}
         />
-        <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+        <Input
           type="email"
           required
           placeholder="이메일"
           value={email}
           onChange={onChangeEmail}
         />
-        <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+        <Input
           type="password"
           required
           placeholder="비밀번호"
@@ -105,7 +103,7 @@ const SignUpPage: NextPage = () => {
           onChange={onChangePassword}
         />
         <input
-          className={`px-3 py-2 border rounded w-80 ${
+          className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
             !passwordError && "mb-4"
           }`}
           type="password"
@@ -114,13 +112,8 @@ const SignUpPage: NextPage = () => {
           value={passwordCheck}
           onChange={onChangePasswordCheck}
         />
-        {passwordError && (
-          <span className="text-xs text-red-600 italic">
-            비밀번호가 일치하지 않습니다.
-          </span>
-        )}
-        <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+        {passwordError && <Error message="비밀번호가 일치하지 않습니다." />}
+        <Input
           type="text"
           required
           placeholder="닉네임"
@@ -128,20 +121,20 @@ const SignUpPage: NextPage = () => {
           onChange={onChangeNickname}
         />
         <button
-          className="bg-sky-600 text-white py-2 rounded mb-2 w-80"
+          className="bg-sky-600 text-white py-2 rounded mb-2 w-80 focus:outline-sky-700"
           type="submit"
         >
           회원가입하기
         </button>
         <button
-          className="border py-2 rounded w-80 text-sm"
+          className="border py-2 rounded w-80 text-sm focus:outline-sky-700"
           type="button"
           onClick={onClickSignIn}
         >
           로그인하러가기
         </button>
       </form>
-    </main>
+    </SignPage>
   );
 };
 

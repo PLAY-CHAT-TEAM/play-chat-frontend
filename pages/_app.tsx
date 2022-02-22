@@ -4,7 +4,7 @@ import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className="app">
+    <>
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
       </Head>
       <Component {...pageProps} />
-    </div>
+    </>
   );
 }
 

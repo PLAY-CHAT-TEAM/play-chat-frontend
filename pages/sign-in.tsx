@@ -1,8 +1,9 @@
 import { NextPage } from "next";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
+import Input from "../components/Input";
 import useInput from "../hooks/useInput";
+import SignPage from "../layouts/SignPage";
 
 const SignInPage: NextPage = () => {
   const router = useRouter();
@@ -24,21 +25,16 @@ const SignInPage: NextPage = () => {
   );
 
   return (
-    <main className="flex flex-col items-center mt-32">
-      <h1 className="mb-7">
-        <Image src="/PingPong.png" width={320} height={75} />
-      </h1>
+    <SignPage title="SignIn">
       <form className="flex flex-col" onSubmit={onSubmit}>
-        <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+        <Input
           type="email"
           required
           placeholder="이메일"
           value={email}
           onChange={onChangeEmail}
         />
-        <input
-          className="px-3 py-2 border rounded mb-4 w-80"
+        <Input
           type="password"
           required
           placeholder="비밀번호"
@@ -46,20 +42,20 @@ const SignInPage: NextPage = () => {
           onChange={onChangePassword}
         />
         <button
-          className="bg-sky-600 text-white py-2 rounded mb-2 w-80"
+          className="bg-sky-600 text-white py-2 rounded mb-2 w-80 focus:outline-sky-700"
           type="submit"
         >
           로그인하기
         </button>
         <button
-          className="border py-2 rounded w-80 text-sm"
+          className="border py-2 rounded w-80 text-sm focus:outline-sky-700"
           type="button"
           onClick={onClickSignUp}
         >
           회원가입하러가기
         </button>
       </form>
-    </main>
+    </SignPage>
   );
 };
 
