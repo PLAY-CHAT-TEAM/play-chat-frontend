@@ -1,11 +1,11 @@
 import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import useInput from "../hooks/useInput";
-import SignPage from "../layouts/SignPage";
-import Input from "../components/Input";
-import Error from "../components/Error";
 import { NextPageWithLayout } from "./_app";
+import useInput from "@/hooks/useInput";
+import SignPage from "@/layouts/SignPage";
+import Input from "@/components/Input";
+import Error from "@/components/Error";
 
 const SignUpPage: NextPageWithLayout = () => {
   const router = useRouter();
