@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
+import { NextPageWithLayout } from "./_app";
 import { ReactElement, useCallback } from "react";
 import Input from "@/components/Input";
 import useInput from "@/hooks/useInput";
 import SignPage from "@/layouts/SignPage";
 
-const SignInPage = () => {
+const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");

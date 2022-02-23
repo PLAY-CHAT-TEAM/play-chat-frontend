@@ -1,12 +1,13 @@
 import { ReactElement, useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { NextPageWithLayout } from "./_app";
 import useInput from "@/hooks/useInput";
 import SignPage from "@/layouts/SignPage";
 import Input from "@/components/Input";
 import Error from "@/components/Error";
 
-const SignUpPage = () => {
+const SignUpPage: NextPageWithLayout = () => {
   const router = useRouter();
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
@@ -16,7 +17,10 @@ const SignUpPage = () => {
     "/default-profile.png"
   );
   const uploadFileRef = useRef<HTMLInputElement | null>(null);
-  const [passwordError, setPasswordError] = useState(false);
+  const [passwordCheckError, setPasswordCheckError] = useState("");
+  const [passwordRegError, setPasswordRegError] = useState("");
+  const passwordRegExp =
+    /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[$@$!%*#?&])[a-zA-Z\d$@$!%*#?&]{8,16}$/;
 
   const onUploadFile = useCallback((event) => {
     const {
@@ -43,13 +47,14 @@ const SignUpPage = () => {
         !password.trim() ||
         !passwordCheck.trim() ||
         !nickname.trim() ||
-        passwordError
+        passwordRegError ||
+        passwordCheckError
       ) {
         return;
       }
       router.push("/");
     },
-    [router, email, password, passwordCheck, nickname, passwordError]
+    [router, email, password, passwordCheck, nickname, passwordCheckError]
   );
 
   const onClickSignIn = useCallback(() => {
@@ -57,8 +62,20 @@ const SignUpPage = () => {
   }, [router]);
 
   useEffect(() => {
-    setPasswordError(password !== passwordCheck);
+    if (password !== passwordCheck) {
+      setPasswordCheckError("비밀번호가 일치하지 않습니다.");
+    } else {
+      setPasswordCheckError("");
+    }
   }, [password, passwordCheck]);
+
+  useEffect(() => {
+    if (password && !passwordRegExp.test(password)) {
+      setPasswordRegError("문자, 숫자, 특수문자를 포함한 최소 8자리 비밀번호");
+    } else {
+      setPasswordRegError("");
+    }
+  }, [password]);
 
   return (
     <form className="flex flex-col" onSubmit={onSubmit}>
@@ -93,16 +110,20 @@ const SignUpPage = () => {
         value={email}
         onChange={onChangeEmail}
       />
-      <Input
+      <input
+        className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
+          !passwordRegError && "mb-4"
+        }`}
         type="password"
         required
         placeholder="비밀번호"
         value={password}
         onChange={onChangePassword}
       />
+      {passwordRegError && <Error message={passwordRegError} />}
       <input
         className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
-          !passwordError && "mb-4"
+          !passwordCheckError && "mb-4"
         }`}
         type="password"
         required
@@ -110,7 +131,7 @@ const SignUpPage = () => {
         value={passwordCheck}
         onChange={onChangePasswordCheck}
       />
-      {passwordError && <Error message="비밀번호가 일치하지 않습니다." />}
+      {passwordCheckError && <Error message={passwordCheckError} />}
       <Input
         type="text"
         required
