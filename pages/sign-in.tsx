@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { ReactElement, useCallback } from "react";
-import Input from "../components/Input";
-import useInput from "../hooks/useInput";
-import SignPage from "../layouts/SignPage";
+import Input from "@/components/Input";
+import useInput from "@/hooks/useInput";
+import SignPage from "@/layouts/SignPage";
 
 const SignInPage = () => {
   const router = useRouter();
