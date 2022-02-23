@@ -47,6 +47,7 @@ const SignUpPage: NextPageWithLayout = () => {
         !password.trim() ||
         !passwordCheck.trim() ||
         !nickname.trim() ||
+        passwordRegError ||
         passwordCheckError
       ) {
         return;
