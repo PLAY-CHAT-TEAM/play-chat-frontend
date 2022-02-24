@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
 
 const initialState = {
   email: "",
@@ -32,7 +33,14 @@ const userSlice = createSlice({
       state.refreshToken = action.payload;
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: {
+    [HYDRATE]: (state, action) => {
+      return {
+        ...state,
+        ...action.payload.subject,
+      };
+    },
+  },
 });
 
 export default userSlice;
