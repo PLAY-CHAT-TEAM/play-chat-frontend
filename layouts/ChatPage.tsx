@@ -3,18 +3,28 @@ import ChannelList from "@/components/ChannelList";
 import DMList from "@/components/DMList";
 import SearchInput from "@/components/SearchInput";
 import UserInfo from "@/components/UserInfo";
+import Head from "next/head";
 
-const ChatPage: FC = ({ children }) => {
+interface Props {
+  title: string;
+}
+
+const ChatPage: FC<Props> = ({ title, children }) => {
   return (
-    <div className="flex">
-      <div className="p-5">
-        <SearchInput />
-        <UserInfo />
-        <ChannelList />
-        <DMList />
+    <>
+      <Head>
+        <title>{title} - PingPong</title>
+      </Head>
+      <div className="flex">
+        <div className="p-5">
+          <SearchInput />
+          <UserInfo />
+          <ChannelList />
+          <DMList />
+        </div>
+        {children}
       </div>
-      {children}
-    </div>
+    </>
   );
 };
 

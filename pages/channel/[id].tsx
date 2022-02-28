@@ -38,9 +38,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const channel: Channel | undefined = channelArray.find(
     (v) => v.id === params?.id
   );
+  const title: string | undefined = channel?.name;
   return {
     props: {
       channel,
+      title,
     },
     revalidate: 10,
   };
@@ -48,6 +50,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 const ChannelPage: NextPageWithLayout = ({
   channel,
+  title,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [showChannelDetails, setShowChannelDetails] = useState(false);
 
@@ -113,7 +116,7 @@ const ChannelPage: NextPageWithLayout = ({
 };
 
 ChannelPage.getLayout = function getLayout(page: ReactElement) {
-  return <ChatPage>{page}</ChatPage>;
+  return <ChatPage title={page.props.title}>{page}</ChatPage>;
 };
 
 export default ChannelPage;
