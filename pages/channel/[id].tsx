@@ -43,13 +43,6 @@ const ChannelPage = ({
   return (
     <div className="flex m-2">
       <div>
-        <ul>
-          <li>workspace1</li>
-          <li>workspace2</li>
-          <li>workspace3</li>
-        </ul>
-      </div>
-      <div>
         <input type="text" placeholder="Search Anything" />
         <div>
           <span>My Profile</span>
