@@ -50,7 +50,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 const ChannelPage: NextPageWithLayout = ({
   channel,
-  title,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [showChannelDetails, setShowChannelDetails] = useState(false);
 
