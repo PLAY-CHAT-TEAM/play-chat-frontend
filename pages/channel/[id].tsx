@@ -6,8 +6,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faTelegram } from "@fortawesome/free-brands-svg-icons";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
-import { useCallback, useState } from "react";
+import { ReactElement, useCallback, useState } from "react";
 import ChatPage from "@/layouts/ChatPage";
+import { NextPageWithLayout } from "../_app";
 
 interface Channel {
   id: string;
@@ -45,7 +46,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
-const ChannelPage = ({
+const ChannelPage: NextPageWithLayout = ({
   channel,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [showChannelDetails, setShowChannelDetails] = useState(false);
@@ -55,7 +56,7 @@ const ChannelPage = ({
   }, []);
 
   return (
-    <ChatPage>
+    <>
       <div className="flex-1 p-5 h-screen">
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-end mb-2">
@@ -107,8 +108,12 @@ const ChannelPage = ({
           </div>
         </div>
       )}
-    </ChatPage>
+    </>
   );
+};
+
+ChannelPage.getLayout = function getLayout(page: ReactElement) {
+  return <ChatPage>{page}</ChatPage>;
 };
 
 export default ChannelPage;
