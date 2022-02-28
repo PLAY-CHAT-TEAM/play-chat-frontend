@@ -5,7 +5,7 @@ const DMList: VFC = () => {
   return (
     <div className="mb-4">
       <details open>
-        <summary className="font-bold">MESSAGES</summary>
+        <summary className="font-bold">DMS</summary>
         <ul className="px-4">
           <li>
             <Link href={`/dm/${1}`}>Kycho</Link>
