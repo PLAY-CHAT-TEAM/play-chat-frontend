@@ -1,15 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faEllipsis,
   faSquarePlus,
   faArrowLeft,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { faTelegram } from "@fortawesome/free-brands-svg-icons";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { useCallback, useState } from "react";
+import { ReactElement, useCallback, useState } from "react";
+import ChatPage from "@/layouts/ChatPage";
+import { NextPageWithLayout } from "../_app";
 
 interface Channel {
   id: string;
@@ -39,15 +38,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const channel: Channel | undefined = channelArray.find(
     (v) => v.id === params?.id
   );
+  const title: string | undefined = channel?.name;
   return {
     props: {
       channel,
+      title,
     },
     revalidate: 10,
   };
 };
 
-const ChannelPage = ({
+const ChannelPage: NextPageWithLayout = ({
   channel,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [showChannelDetails, setShowChannelDetails] = useState(false);
@@ -57,58 +58,7 @@ const ChannelPage = ({
   }, []);
 
   return (
-    <div className="flex">
-      <div className="p-5">
-        <input
-          className="w-60 px-2 py-1 border-2 border-sky-700 rounded mb-4 focus:outline-sky-700 lg:w-72"
-          type="text"
-          placeholder="Search Anything"
-        />
-        <div className="flex justify-around items-center mb-4 bg-sky-700 rounded p-3 text-white">
-          <Image
-            className="rounded-full"
-            src="/default-profile.png"
-            width="50"
-            height="50"
-          />
-          <div className="flex flex-col ml-4">
-            <span className="text-xl">Jiwlee</span>
-            <span className="text-xs">Active</span>
-          </div>
-          <button>
-            <FontAwesomeIcon icon={faEllipsis} size="lg" />
-          </button>
-        </div>
-        <div className="mb-4">
-          <details open>
-            <summary className="font-bold">CHANNELS</summary>
-            <ul className="px-4">
-              <li>
-                <Link href={`/channel/${1}`}>General</Link>
-              </li>
-              <li>
-                <Link href={`/channel/${2}`}>Random</Link>
-              </li>
-              <li>
-                <Link href={`/channel/${3}`}>Study</Link>
-              </li>
-            </ul>
-          </details>
-        </div>
-        <div className="mb-4">
-          <details open>
-            <summary className="font-bold">MESSAGES</summary>
-            <ul className="px-4">
-              <li>
-                <Link href={`/dm/${1}`}>Kycho</Link>
-              </li>
-              <li>
-                <Link href={`/channel/${2}`}>Jiwlee</Link>
-              </li>
-            </ul>
-          </details>
-        </div>
-      </div>
+    <>
       <div className="flex-1 p-5 h-screen">
         <div className="flex flex-col h-full">
           <div className="flex justify-between items-end mb-2">
@@ -160,8 +110,12 @@ const ChannelPage = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
+};
+
+ChannelPage.getLayout = function getLayout(page: ReactElement) {
+  return <ChatPage title={page.props.title}>{page}</ChatPage>;
 };
 
 export default ChannelPage;
