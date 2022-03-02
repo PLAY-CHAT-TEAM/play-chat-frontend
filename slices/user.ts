@@ -1,7 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 
+export interface User {
+  isLoading: boolean;
+  email: string;
+  nickname: string;
+  profileImage: string;
+  accessToken: string;
+  refreshToken: string;
+}
+
 const initialState = {
+  isLoading: false,
   email: "",
   nickname: "",
   profileImage: "",
@@ -13,24 +23,19 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser(state, action) {
+    signin(state) {
+      state.isLoading = true;
+    },
+    signinSuccess(state, action: PayloadAction<User>) {
+      state.isLoading = false;
       state.email = action.payload.email;
       state.nickname = action.payload.nickname;
       state.profileImage = action.payload.profileImage;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
     },
-    setNickname(state, action: PayloadAction<string>) {
-      state.nickname = action.payload;
-    },
-    setProfileImage(state, action: PayloadAction<string>) {
-      state.profileImage = action.payload;
-    },
-    setAccessToken(state, action: PayloadAction<string>) {
-      state.accessToken = action.payload;
-    },
-    setRefreshToken(state, action: PayloadAction<string>) {
-      state.refreshToken = action.payload;
+    signinFailure(state) {
+      state.isLoading = false;
     },
   },
   extraReducers: {
@@ -42,5 +47,7 @@ const userSlice = createSlice({
     },
   },
 });
+
+export const { signin, signinSuccess, signinFailure } = userSlice.actions;
 
 export default userSlice;
