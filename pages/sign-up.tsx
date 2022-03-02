@@ -6,6 +6,7 @@ import useInput from "@/hooks/useInput";
 import SignPage from "@/layouts/SignPage";
 import Input from "@/components/Input";
 import Error from "@/components/Error";
+import axios from "axios";
 
 const SignUpPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -13,10 +14,10 @@ const SignUpPage: NextPageWithLayout = () => {
   const [password, onChangePassword] = useInput("");
   const [passwordCheck, onChangePasswordCheck] = useInput("");
   const [nickname, onChangeNickname] = useInput("");
-  const [previewImageDataURL, setPreviewImageDataURL] = useState<string>(
-    "/default-profile.png"
-  );
+  const [profileImage, setProfileImage] = useState("/default-profile.png");
   const uploadFileRef = useRef<HTMLInputElement | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [signupError, setSignupError] = useState(false);
   const [passwordCheckError, setPasswordCheckError] = useState("");
   const [passwordRegError, setPasswordRegError] = useState("");
   const passwordRegExp =
@@ -30,7 +31,7 @@ const SignUpPage: NextPageWithLayout = () => {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      setPreviewImageDataURL(reader.result as string);
+      setProfileImage(reader.result as string);
     };
     reader.readAsDataURL(theFile);
   }, []);
@@ -40,8 +41,10 @@ const SignUpPage: NextPageWithLayout = () => {
   }, []);
 
   const onSubmit = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
+      setLoading(true);
+      setSignupError(false);
       if (
         !email.trim() ||
         !password.trim() ||
@@ -52,7 +55,27 @@ const SignUpPage: NextPageWithLayout = () => {
       ) {
         return;
       }
-      router.push("/");
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("profileImage", profileImage);
+      formData.append("nickname", nickname);
+      console.log("formData", formData.values);
+      axios
+        .post("/api/signup", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(() => {
+          router.push("/sign-in");
+        })
+        .catch(() => {
+          setSignupError(true);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     },
     [router, email, password, passwordCheck, nickname, passwordCheckError]
   );
@@ -77,12 +100,16 @@ const SignUpPage: NextPageWithLayout = () => {
     }
   }, [password]);
 
+  if (loading) {
+    return <div>로딩중...</div>;
+  }
+
   return (
     <form className="flex flex-col" onSubmit={onSubmit}>
       <div className="mb-2 text-center">
         <Image
           className="rounded-full"
-          src={previewImageDataURL}
+          src={profileImage}
           alt="profile image preview"
           width={200}
           height={200}
