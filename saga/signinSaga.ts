@@ -22,7 +22,7 @@ function* workSigninUser(action: PayloadAction<signinInfo>) {
     const { token } = response.data;
     yield put(signinSuccess({ accessToken: token }));
     yield call(Router.push, "/channel/1");
-  } catch (error: any) {
+  } catch (error) {
     const axiosError = error as AxiosError;
     yield put(signinFailure());
     yield call(toast, axiosError.response?.data.message);
