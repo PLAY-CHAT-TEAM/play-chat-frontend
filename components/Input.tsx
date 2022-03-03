@@ -6,6 +6,7 @@ interface Props<T> {
   placeholder: string;
   value: T;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  maxLength?: number;
 }
 
 const Input = <T extends string | number | readonly string[] | undefined>({
@@ -14,6 +15,7 @@ const Input = <T extends string | number | readonly string[] | undefined>({
   placeholder,
   value,
   onChange,
+  maxLength,
 }: Props<T>) => {
   return (
     <input
@@ -23,6 +25,7 @@ const Input = <T extends string | number | readonly string[] | undefined>({
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      maxLength={maxLength}
     />
   );
 };

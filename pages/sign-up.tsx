@@ -18,7 +18,6 @@ const SignUpPage: NextPageWithLayout = () => {
   const [profileImage, setProfileImage] = useState("/default-profile.png");
   const uploadFileRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
-  const [signupError, setSignupError] = useState(false);
   const [passwordCheckError, setPasswordCheckError] = useState("");
   const [passwordRegError, setPasswordRegError] = useState("");
   const passwordRegExp =
@@ -45,7 +44,6 @@ const SignUpPage: NextPageWithLayout = () => {
     async (event) => {
       event.preventDefault();
       setLoading(true);
-      setSignupError(false);
       if (
         !email.trim() ||
         !password.trim() ||
@@ -64,7 +62,6 @@ const SignUpPage: NextPageWithLayout = () => {
           router.push("/sign-in");
         })
         .catch((error) => {
-          setSignupError(true);
           toast.error(error.response.data.message, {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: 5000,
@@ -139,6 +136,7 @@ const SignUpPage: NextPageWithLayout = () => {
           placeholder="이메일"
           value={email}
           onChange={onChangeEmail}
+          maxLength={50}
         />
         <input
           className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
@@ -168,6 +166,7 @@ const SignUpPage: NextPageWithLayout = () => {
           placeholder="닉네임"
           value={nickname}
           onChange={onChangeNickname}
+          maxLength={50}
         />
         <button
           className="bg-sky-600 text-white py-2 rounded mb-2 w-80 focus:outline-sky-700"
