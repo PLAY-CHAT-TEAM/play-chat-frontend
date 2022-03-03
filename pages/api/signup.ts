@@ -9,11 +9,12 @@ const handleSignUp = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(405).end();
     return;
   }
-  const { email, password, nickname } = req.body;
+  const { email, password, nickname, profileImage } = req.body;
   const formData = new FormData();
   formData.append("email", email);
   formData.append("password", password);
   formData.append("nickname", nickname);
+  formData.append("profileImage", profileImage);
   const formHeaders = formData.getHeaders();
 
   try {

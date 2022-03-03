@@ -15,7 +15,8 @@ const SignUpPage: NextPageWithLayout = () => {
   const [password, onChangePassword] = useInput("");
   const [passwordCheck, onChangePasswordCheck] = useInput("");
   const [nickname, onChangeNickname] = useInput("");
-  const [profileImage, setProfileImage] = useState("/default-profile.png");
+  const [profileImage, setProfileImage] = useState<File>();
+  const [previewImage, setPreviewImage] = useState("/default-profile.png");
   const uploadFileRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
   const [passwordCheckError, setPasswordCheckError] = useState("");
@@ -28,10 +29,11 @@ const SignUpPage: NextPageWithLayout = () => {
       target: { files },
     } = event;
     const theFile = files[0];
+    setProfileImage(theFile);
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      setProfileImage(reader.result as string);
+      setPreviewImage(reader.result as string);
     };
     reader.readAsDataURL(theFile);
   }, []);
@@ -99,6 +101,8 @@ const SignUpPage: NextPageWithLayout = () => {
     }
   }, [password]);
 
+  console.log("profileImage", profileImage);
+
   if (loading) {
     return <div>로딩중...</div>;
   }
@@ -109,7 +113,7 @@ const SignUpPage: NextPageWithLayout = () => {
         <div className="mb-2 text-center">
           <Image
             className="rounded-full"
-            src={profileImage}
+            src={previewImage}
             alt="profile image preview"
             width={200}
             height={200}
