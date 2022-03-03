@@ -1,12 +1,13 @@
 import { useRouter } from "next/router";
 import { NextPageWithLayout } from "./_app";
-import { ReactElement, useCallback } from "react";
+import { ReactElement, useCallback, useEffect } from "react";
 import Input from "@/components/Input";
 import useInput from "@/hooks/useInput";
 import SignPage from "@/layouts/SignPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducer";
 import { signin } from "@/slices/user";
+import { toast } from "react-toastify";
 
 const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -22,16 +23,17 @@ const SignInPage: NextPageWithLayout = () => {
   const onSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      console.log("로그인");
       if (!email.trim() || !password.trim()) {
         return;
       }
-      dispatch(signin());
+      dispatch(signin({ email, password }));
     },
     [email, password, dispatch, signin]
   );
 
-  console.log("user", user);
+  // useEffect(() => {
+  //   user.signinError.message && toast(user.signinError.message);
+  // }, [user.signinError]);
 
   return (
     <form className="flex flex-col" onSubmit={onSubmit}>
