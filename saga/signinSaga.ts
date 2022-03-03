@@ -1,13 +1,31 @@
+import { PayloadAction } from "@reduxjs/toolkit";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import Router from "next/router";
+import { toast } from "react-toastify";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { signinSuccess, signinFailure, User } from "../slices/user";
+import { signinSuccess, signinFailure } from "../slices/user";
 
-function* workSigninUser() {
+type signinInfo = {
+  email: string;
+  password: string;
+};
+
+function* workSigninUser(action: PayloadAction<signinInfo>) {
   try {
-    const user: Response = yield call(() => fetch("/api/signin"));
-    const formattedUser: User = yield user.json();
-    yield put(signinSuccess(formattedUser));
-  } catch (error) {
+    const { email, password } = action.payload;
+    const response: AxiosResponse = yield call(() => {
+      return axios.post("/api/signin", {
+        email,
+        password,
+      });
+    });
+    const { token } = response.data;
+    yield put(signinSuccess({ accessToken: token }));
+    yield call(Router.push, "/channel/1");
+  } catch (error: any) {
+    const axiosError = error as AxiosError;
     yield put(signinFailure());
+    yield call(toast, axiosError.response?.data.message);
   }
 }
 
