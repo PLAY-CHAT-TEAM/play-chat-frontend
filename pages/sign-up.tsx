@@ -55,22 +55,13 @@ const SignUpPage: NextPageWithLayout = () => {
       ) {
         return;
       }
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("profileImage", profileImage);
-      formData.append("nickname", nickname);
-      console.log("formData", formData.values);
       axios
-        .post("/api/signup", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post("/api/signup", { email, password, profileImage, nickname })
         .then(() => {
           router.push("/sign-in");
         })
-        .catch(() => {
+        .catch((error) => {
+          alert(error.response.data.message);
           setSignupError(true);
         })
         .finally(() => {
