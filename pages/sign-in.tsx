@@ -6,10 +6,11 @@ import useInput from "@/hooks/useInput";
 import SignPage from "@/layouts/SignPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducer";
-import { signin } from "@/slices/user";
+import { signin } from "@/slices/signin";
 
 const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
+  const signinState = useSelector((state: RootState) => state.signin);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const [email, onChangeEmail] = useInput("");
@@ -22,16 +23,17 @@ const SignInPage: NextPageWithLayout = () => {
   const onSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      console.log("로그인");
       if (!email.trim() || !password.trim()) {
         return;
       }
-      dispatch(signin());
+      dispatch(signin({ email, password }));
     },
     [email, password, dispatch, signin]
   );
 
-  console.log("user", user);
+  if (signinState.signinLoading || user.accessToken) {
+    return <div>로딩중...</div>;
+  }
 
   return (
     <form className="flex flex-col" onSubmit={onSubmit}>
