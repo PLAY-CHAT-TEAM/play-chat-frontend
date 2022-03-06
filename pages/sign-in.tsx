@@ -6,10 +6,11 @@ import useInput from "@/hooks/useInput";
 import SignPage from "@/layouts/SignPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducer";
-import { signin } from "@/slices/user";
+import { signin } from "@/slices/signin";
 
 const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
+  const signinState = useSelector((state: RootState) => state.signin);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const [email, onChangeEmail] = useInput("");
@@ -30,7 +31,7 @@ const SignInPage: NextPageWithLayout = () => {
     [email, password, dispatch, signin]
   );
 
-  if (user.signinLoading || user.accessToken) {
+  if (signinState.signinLoading || user.accessToken) {
     return <div>로딩중...</div>;
   }
 

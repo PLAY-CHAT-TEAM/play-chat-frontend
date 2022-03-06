@@ -3,7 +3,8 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { signinSuccess, signinFailure, setAccessToken } from "../slices/user";
+import { setAccessToken } from "@/slices/user";
+import { signinFailure, signinSuccess } from "@/slices/signin";
 
 type signinInfo = {
   email: string;
@@ -31,5 +32,5 @@ function* workSigninUser(action: PayloadAction<signinInfo>) {
 }
 
 export function* signinSaga() {
-  yield takeEvery("user/signin", workSigninUser);
+  yield takeEvery("signin/signin", workSigninUser);
 }
