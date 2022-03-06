@@ -1,13 +1,12 @@
 import { useRouter } from "next/router";
 import { NextPageWithLayout } from "./_app";
-import { ReactElement, useCallback, useEffect } from "react";
+import { ReactElement, useCallback } from "react";
 import Input from "@/components/Input";
 import useInput from "@/hooks/useInput";
 import SignPage from "@/layouts/SignPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducer";
 import { signin } from "@/slices/user";
-import { toast } from "react-toastify";
 
 const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -31,9 +30,9 @@ const SignInPage: NextPageWithLayout = () => {
     [email, password, dispatch, signin]
   );
 
-  // useEffect(() => {
-  //   user.signinError.message && toast(user.signinError.message);
-  // }, [user.signinError]);
+  if (user.signinLoading || user.accessToken) {
+    return <div>로딩중...</div>;
+  }
 
   return (
     <form className="flex flex-col" onSubmit={onSubmit}>

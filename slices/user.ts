@@ -5,9 +5,8 @@ const initialState = {
   signinLoading: false,
   email: "",
   nickname: "",
-  profileImage: "",
+  profileImage: null,
   accessToken: "",
-  refreshToken: "",
 };
 
 const userSlice = createSlice({
@@ -16,10 +15,16 @@ const userSlice = createSlice({
   reducers: {
     signin(state, action) {
       state.signinLoading = true;
+      state.email = "";
+      state.nickname = "";
+      state.profileImage = null;
+      state.accessToken = "";
     },
-    signinSuccess(state, action) {
-      state.signinLoading = false;
+    setAccessToken(state, action) {
       state.accessToken = action.payload.accessToken;
+    },
+    signinSuccess(state) {
+      state.signinLoading = false;
     },
     signinFailure(state) {
       state.signinLoading = false;
@@ -35,6 +40,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { signin, signinSuccess, signinFailure } = userSlice.actions;
+export const { signin, setAccessToken, signinSuccess, signinFailure } =
+  userSlice.actions;
 
 export default userSlice;
