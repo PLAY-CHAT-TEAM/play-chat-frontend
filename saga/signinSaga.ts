@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import { call, put, takeEvery } from "redux-saga/effects";
-import { setAccessToken } from "@/slices/user";
+import { getUser, setAccessToken } from "@/slices/user";
 import { signinFailure, signinSuccess } from "@/slices/signin";
 
 type signinInfo = {
@@ -22,6 +22,7 @@ function* workSigninUser(action: PayloadAction<signinInfo>) {
     });
     const { token } = response.data;
     yield put(setAccessToken({ accessToken: token }));
+    yield put(getUser());
     yield call(Router.push, "/channel/1");
     yield put(signinSuccess());
   } catch (error) {
