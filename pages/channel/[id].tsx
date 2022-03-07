@@ -9,6 +9,8 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { ReactElement, useCallback, useState } from "react";
 import ChatPage from "@/layouts/ChatPage";
 import { NextPageWithLayout } from "../_app";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/reducer";
 
 interface Channel {
   id: string;
@@ -51,11 +53,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 const ChannelPage: NextPageWithLayout = ({
   channel,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const user = useSelector((state: RootState) => state.user);
   const [showChannelDetails, setShowChannelDetails] = useState(false);
 
   const onClickShowDetails = useCallback(() => {
     setShowChannelDetails((prev) => !prev);
   }, []);
+
+  if (user.isLoading) {
+    return <div>로딩중...</div>;
+  }
 
   return (
     <>
