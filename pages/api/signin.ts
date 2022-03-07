@@ -9,7 +9,6 @@ const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
   const { email, password } = req.body;
-  console.log("singin", email, password);
   try {
     const response = await axios.post(
       `${BACK_URL}/api/auth/sign-in`,
