@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -20,7 +21,18 @@ const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       }
     );
-    res.status(response.status).json({ ...response.data });
+    const { token } = response.data;
+    res
+      .setHeader(
+        "Set-Cookie",
+        serialize("accessToken", `Bearer ${token}`, {
+          path: "/",
+          httpOnly: true,
+          maxAge: 60 * 60 * 24 * 7,
+        })
+      )
+      .status(response.status)
+      .json({ ...response.data });
   } catch (error) {
     const axiosError = error as AxiosError;
     res

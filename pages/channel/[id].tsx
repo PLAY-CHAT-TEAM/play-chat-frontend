@@ -5,12 +5,10 @@ import {
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { faTelegram } from "@fortawesome/free-brands-svg-icons";
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { ReactElement, useCallback, useState } from "react";
 import ChatPage from "@/layouts/ChatPage";
 import { NextPageWithLayout } from "../_app";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/reducer";
 
 interface Channel {
   id: string;
@@ -23,46 +21,39 @@ const channelArray: Channel[] = [
   { id: "3", name: "study" },
 ];
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = channelArray.map((channel) => {
-    const { id } = channel;
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
+  if (!req.cookies.accessToken) {
     return {
-      params: { id },
+      redirect: {
+        destination: "/sign-in",
+        permanent: false,
+      },
     };
-  });
-  return {
-    paths,
-    fallback: false,
-  };
-};
+  }
+  const { id } = query;
+  const channel: Channel | undefined = channelArray.find((v) => v.id === id);
+  if (!channel) {
+    return {
+      notFound: true,
+    };
+  }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const channel: Channel | undefined = channelArray.find(
-    (v) => v.id === params?.id
-  );
-  const title: string | undefined = channel?.name;
   return {
-    props: {
-      channel,
-      title,
-    },
-    revalidate: 10,
+    props: { channel },
   };
 };
 
 const ChannelPage: NextPageWithLayout = ({
   channel,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const user = useSelector((state: RootState) => state.user);
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [showChannelDetails, setShowChannelDetails] = useState(false);
 
   const onClickShowDetails = useCallback(() => {
     setShowChannelDetails((prev) => !prev);
   }, []);
-
-  if (user.isLoading) {
-    return <div>로딩중...</div>;
-  }
 
   return (
     <>
