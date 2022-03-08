@@ -7,6 +7,21 @@ import SignPage from "@/layouts/SignPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducer";
 import { signin } from "@/slices/signin";
+import { GetServerSideProps } from "next";
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  if (req.cookies.accessToken) {
+    return {
+      redirect: {
+        destination: "/channel/1",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
 
 const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
