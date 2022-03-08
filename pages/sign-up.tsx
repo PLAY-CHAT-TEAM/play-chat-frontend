@@ -8,6 +8,21 @@ import Input from "@/components/Input";
 import Error from "@/components/Error";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { GetServerSideProps } from "next";
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  if (req.cookies.accessToken) {
+    return {
+      redirect: {
+        destination: "/channel/1",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
 
 const SignUpPage: NextPageWithLayout = () => {
   const router = useRouter();
