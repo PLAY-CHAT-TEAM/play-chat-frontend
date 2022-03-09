@@ -3,7 +3,7 @@ import { serialize } from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { BACK_URL } = process.env;
+  const { BACK_URL, ACCESSTOKEN_MAX_AGE } = process.env;
 
   if (req.method !== "POST") {
     res.status(405).end();
@@ -25,10 +25,10 @@ const handleSignIn = async (req: NextApiRequest, res: NextApiResponse) => {
     res
       .setHeader(
         "Set-Cookie",
-        serialize("accessToken", `Bearer ${token}`, {
+        serialize("accessToken", token, {
           path: "/",
           httpOnly: true,
-          maxAge: 60 * 60 * 24 * 7,
+          maxAge: ACCESSTOKEN_MAX_AGE ? +ACCESSTOKEN_MAX_AGE : 86400,
         })
       )
       .status(response.status)
