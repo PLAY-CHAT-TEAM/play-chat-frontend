@@ -7,7 +7,6 @@ const initialState = {
   email: "",
   nickname: "",
   imageUrl: null,
-  accessToken: "",
 };
 
 const userSlice = createSlice({
@@ -24,9 +23,6 @@ const userSlice = createSlice({
       state.nickname = action.payload.nickname;
       state.imageUrl = action.payload.imageUrl;
     },
-    setAccessToken(state, action) {
-      state.accessToken = action.payload.accessToken;
-    },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
@@ -38,6 +34,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { getUser, setUser, setAccessToken } = userSlice.actions;
+export const { getUser, setUser } = userSlice.actions;
 
 export default userSlice;
