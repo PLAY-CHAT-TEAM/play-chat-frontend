@@ -6,9 +6,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faTelegram } from "@fortawesome/free-brands-svg-icons";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { ReactElement, useCallback, useState } from "react";
+import { ReactElement, useCallback, useEffect, useState } from "react";
 import ChatPage from "@/layouts/ChatPage";
 import { NextPageWithLayout } from "../_app";
+import { useDispatch } from "react-redux";
+import { getUser } from "@/slices/user";
 
 interface Channel {
   id: string;
@@ -49,10 +51,15 @@ export const getServerSideProps: GetServerSideProps = async ({
 const ChannelPage: NextPageWithLayout = ({
   channel,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const dispatch = useDispatch();
   const [showChannelDetails, setShowChannelDetails] = useState(false);
 
   const onClickShowDetails = useCallback(() => {
     setShowChannelDetails((prev) => !prev);
+  }, []);
+
+  useEffect(() => {
+    dispatch(getUser());
   }, []);
 
   return (

@@ -2,18 +2,26 @@ import { createSlice } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 
 const initialState = {
+  isLoading: false,
+  id: null,
   email: "",
   nickname: "",
-  profileImage: null,
-  accessToken: "",
+  imageUrl: null,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setAccessToken(state, action) {
-      state.accessToken = action.payload.accessToken;
+    getUser(state) {
+      state.isLoading = true;
+    },
+    setUser(state, action) {
+      state.isLoading = false;
+      state.id = action.payload.id;
+      state.email = action.payload.email;
+      state.nickname = action.payload.nickname;
+      state.imageUrl = action.payload.imageUrl;
     },
   },
   extraReducers: {
@@ -26,6 +34,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setAccessToken } = userSlice.actions;
+export const { getUser, setUser } = userSlice.actions;
 
 export default userSlice;
