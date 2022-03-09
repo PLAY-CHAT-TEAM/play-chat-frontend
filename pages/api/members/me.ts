@@ -8,14 +8,12 @@ const handleMe = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(405).end();
     return;
   }
-  const { authorization } = req.headers;
-  let headers = {};
-  if (authorization) {
-    headers = { authorization };
-  }
+  const { accessToken } = req.cookies;
   try {
     const response = await axios.get(`${BACK_URL}/api/members/me`, {
-      headers,
+      headers: {
+        Authorization: accessToken,
+      },
     });
     res.status(response.status).json({ ...response.data });
   } catch (error) {
