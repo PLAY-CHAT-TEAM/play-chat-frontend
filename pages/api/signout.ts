@@ -6,7 +6,6 @@ const handleSignOut = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(405).end();
     return;
   }
-  console.log("handleSignOut");
   res
     .setHeader(
       "Set-Cookie",
