@@ -12,7 +12,7 @@ const handleMe = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const response = await axios.get(`${BACK_URL}/api/members/me`, {
       headers: {
-        Authorization: accessToken,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
     res.status(response.status).json({ ...response.data });
