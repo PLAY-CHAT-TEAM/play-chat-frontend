@@ -1,13 +1,12 @@
 import { useRouter } from "next/router";
 import { NextPageWithLayout } from "./_app";
-import { ReactElement, useCallback } from "react";
+import { ReactElement, useCallback, useState } from "react";
 import Input from "@/components/Input";
 import useInput from "@/hooks/useInput";
 import SignPage from "@/layouts/SignPage";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/reducer";
-import { signin } from "@/slices/signin";
 import { GetServerSideProps } from "next";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (req.cookies.accessToken) {
@@ -25,11 +24,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
 const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
-  const signinState = useSelector((state: RootState) => state.signin);
-  const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
+  const [loading, setLoading] = useState(false);
 
   const onClickSignUp = useCallback(() => {
     router.push("/sign-up");
@@ -38,15 +35,41 @@ const SignInPage: NextPageWithLayout = () => {
   const onSubmit = useCallback(
     (event) => {
       event.preventDefault();
+      setLoading(true);
       if (!email.trim() || !password.trim()) {
         return;
       }
-      dispatch(signin({ email, password }));
+      axios
+        .post(
+          "/api/signin",
+          { email, password },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        )
+        .then(() => {
+          router.push("/channel/1");
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setLoading(false);
+        });
     },
-    [email, password, dispatch, signin]
+    [email, password]
   );
 
-  if (signinState.signinLoading) {
+  if (loading) {
     return <div>로딩중...</div>;
   }
 
