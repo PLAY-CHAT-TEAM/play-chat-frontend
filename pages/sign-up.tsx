@@ -9,6 +9,7 @@ import Error from "@/components/Error";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { GetServerSideProps } from "next";
+import Success from "@/components/Success";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (req.cookies.accessToken) {
@@ -34,10 +35,14 @@ const SignUpPage: NextPageWithLayout = () => {
   const [previewImage, setPreviewImage] = useState("/default-profile.png");
   const uploadFileRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
-  const [passwordCheckError, setPasswordCheckError] = useState("");
-  const [passwordRegError, setPasswordRegError] = useState("");
+  const [emailCheckError, setEmailCheckError] = useState(false);
+  const [emailRegError, setEmailRegError] = useState(false);
+  const [passwordCheckError, setPasswordCheckError] = useState(false);
+  const [passwordRegError, setPasswordRegError] = useState(false);
   const passwordRegExp =
     /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[$@$!%*#?&])[a-zA-Z\d$@$!%*#?&]{8,16}$/;
+  const emailRegExp =
+    /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
 
   const onUploadFile = useCallback((event) => {
     const {
@@ -66,6 +71,8 @@ const SignUpPage: NextPageWithLayout = () => {
         !password.trim() ||
         !passwordCheck.trim() ||
         !nickname.trim() ||
+        emailRegError ||
+        emailCheckError ||
         passwordRegError ||
         passwordCheckError
       ) {
@@ -74,7 +81,7 @@ const SignUpPage: NextPageWithLayout = () => {
       axios
         .post("/api/signup", { email, password, profileImage, nickname })
         .then((response) => {
-          const { nickname, email } = response.data;
+          const { nickname } = response.data;
           toast(`${nickname}님 회원가입을 축하합니다!`);
           router.push("/sign-in");
         })
@@ -101,22 +108,42 @@ const SignUpPage: NextPageWithLayout = () => {
   }, [router]);
 
   useEffect(() => {
-    if (password !== passwordCheck) {
-      setPasswordCheckError("비밀번호가 일치하지 않습니다.");
-    } else {
-      setPasswordCheckError("");
-    }
+    setPasswordCheckError(!!passwordCheck && password !== passwordCheck);
   }, [password, passwordCheck]);
 
   useEffect(() => {
-    if (password && !passwordRegExp.test(password)) {
-      setPasswordRegError("문자, 숫자, 특수문자를 포함한 최소 8자리 비밀번호");
-    } else {
-      setPasswordRegError("");
-    }
+    setPasswordRegError(!!password && !passwordRegExp.test(password));
   }, [password]);
 
-  console.log("profileImage", profileImage);
+  useEffect(() => {
+    setEmailCheckError(false);
+    setEmailRegError(false);
+    if (!email) {
+      return;
+    }
+    if (emailRegExp.test(email)) {
+      setEmailRegError(false);
+      axios
+        .get(`/api/members/check-available-email?email=${email}`)
+        .then((response) => {
+          const { available } = response.data;
+          setEmailCheckError(!available);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+    } else {
+      setEmailRegError(true);
+    }
+  }, [email]);
 
   if (loading) {
     return <div>로딩중...</div>;
@@ -149,7 +176,10 @@ const SignUpPage: NextPageWithLayout = () => {
           onChange={onUploadFile}
           ref={uploadFileRef}
         />
-        <Input
+        <input
+          className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
+            !email && "mb-4"
+          }`}
           type="email"
           required
           placeholder="이메일"
@@ -157,6 +187,11 @@ const SignUpPage: NextPageWithLayout = () => {
           onChange={onChangeEmail}
           maxLength={50}
         />
+        {email && !emailCheckError && !emailRegError && (
+          <Success message="사용가능한 이메일입니다." />
+        )}
+        {emailCheckError && <Error message="이미 사용중인 이메일입니다." />}
+        {emailRegError && <Error message="사용불가능한 이메일입니다." />}
         <input
           className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
             !passwordRegError && "mb-4"
@@ -167,7 +202,9 @@ const SignUpPage: NextPageWithLayout = () => {
           value={password}
           onChange={onChangePassword}
         />
-        {passwordRegError && <Error message={passwordRegError} />}
+        {passwordRegError && (
+          <Error message="문자, 숫자, 특수문자를 포함한 최소 8자리 비밀번호" />
+        )}
         <input
           className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
             !passwordCheckError && "mb-4"
@@ -178,7 +215,9 @@ const SignUpPage: NextPageWithLayout = () => {
           value={passwordCheck}
           onChange={onChangePasswordCheck}
         />
-        {passwordCheckError && <Error message={passwordCheckError} />}
+        {passwordCheckError && (
+          <Error message="비밀번호가 일치하지 않습니다." />
+        )}
         <Input
           type="text"
           required
