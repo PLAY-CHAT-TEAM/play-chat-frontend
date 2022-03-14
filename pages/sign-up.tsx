@@ -176,44 +176,38 @@ const SignUpPage: NextPageWithLayout = () => {
           onChange={onUploadFile}
           ref={uploadFileRef}
         />
-        <input
-          className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
-            !email && "mb-4"
-          }`}
+        <Input
           type="email"
           required
           placeholder="이메일"
           value={email}
           onChange={onChangeEmail}
           maxLength={50}
+          marginActive={!email}
         />
         {email && !emailCheckError && !emailRegError && (
           <Success message="사용가능한 이메일입니다." />
         )}
         {emailCheckError && <Error message="이미 사용중인 이메일입니다." />}
         {emailRegError && <Error message="사용불가능한 이메일입니다." />}
-        <input
-          className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
-            !passwordRegError && "mb-4"
-          }`}
+        <Input
           type="password"
           required
           placeholder="비밀번호"
           value={password}
           onChange={onChangePassword}
+          marginActive={!passwordRegError}
         />
         {passwordRegError && (
           <Error message="문자, 숫자, 특수문자를 포함한 최소 8자리 비밀번호" />
         )}
-        <input
-          className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
-            !passwordCheckError && "mb-4"
-          }`}
+        <Input
           type="password"
           required
           placeholder="비밀번호확인"
           value={passwordCheck}
           onChange={onChangePasswordCheck}
+          marginActive={!passwordCheckError}
         />
         {passwordCheckError && (
           <Error message="비밀번호가 일치하지 않습니다." />
