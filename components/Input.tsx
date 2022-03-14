@@ -7,6 +7,7 @@ interface Props<T> {
   value: T;
   onChange: ChangeEventHandler<HTMLInputElement>;
   maxLength?: number;
+  marginActive?: boolean;
 }
 
 const Input = <T extends string | number | readonly string[] | undefined>({
@@ -16,10 +17,13 @@ const Input = <T extends string | number | readonly string[] | undefined>({
   value,
   onChange,
   maxLength,
+  marginActive = true,
 }: Props<T>) => {
   return (
     <input
-      className="px-3 py-2 border rounded mb-4 w-80 focus:outline-sky-700"
+      className={`px-3 py-2 border rounded w-80 focus:outline-sky-700 ${
+        marginActive && "mb-4"
+      }`}
       type={type}
       required={required}
       placeholder={placeholder}
